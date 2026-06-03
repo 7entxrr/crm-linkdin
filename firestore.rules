@@ -1,0 +1,104 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return isSignedIn() && userDoc().data.role == 'admin';
+    }
+
+    function isRecruiter() {
+      return isSignedIn() && userDoc().data.role == 'recruiter';
+    }
+
+    function isActiveUser() {
+      return isSignedIn() && userDoc().data.status == 'active';
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /candidates/{candidateId} {
+      allow read: if isActiveUser() && (
+        isAdmin() ||
+        resource.data.assignedRecruiterId == request.auth.uid
+      );
+      allow create: if isActiveUser();
+      allow update, delete: if isActiveUser() && (
+        isAdmin() ||
+        resource.data.assignedRecruiterId == request.auth.uid
+      );
+    }
+
+    match /notes/{noteId} {
+      allow read: if isActiveUser();
+      allow create: if isActiveUser();
+      allow update, delete: if isActiveUser() && (
+        isAdmin() || resource.data.authorId == request.auth.uid
+      );
+    }
+
+    match /outreachs/{id} {
+      allow read: if isActiveUser();
+      allow write: if isActiveUser();
+    }
+
+    match /followups/{id} {
+      allow read: if isActiveUser();
+      allow write: if isActiveUser();
+    }
+
+    match /activities/{id} {
+      allow read: if isAdmin();
+      allow create: if isActiveUser();
+    }
+
+    match /templates/{id} {
+      allow read: if isActiveUser();
+      allow write: if isActiveUser();
+    }
+
+    match /settings/{id} {
+      allow read: if isActiveUser();
+      allow write: if isAdmin();
+    }
+
+    match /sourcingRules/{id} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /notifications/{id} {
+      allow read: if isActiveUser() && (
+        isAdmin() || resource.data.userId == request.auth.uid
+      );
+      allow update: if isActiveUser() && (
+        isAdmin() || resource.data.userId == request.auth.uid
+      );
+    }
+
+    match /tasks/{id} {
+      allow read, update, delete: if isActiveUser() && (
+        isAdmin() || resource.data.userId == request.auth.uid
+      );
+      allow create: if isActiveUser() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /savedViews/{id} {
+      allow read, update, delete: if isActiveUser() && resource.data.userId == request.auth.uid;
+      allow create: if isActiveUser() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /messages/{id} {
+      allow read: if isActiveUser();
+    }
+  }
+}
