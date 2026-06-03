@@ -424,7 +424,7 @@ assignments) and picks the lowest. Used on the **manual Apollo import** path whe
 
 | Path | Schedule (UTC) | Action |
 |------|----------------|--------|
-| `/api/automation/cron` | `0 */6 * * *` (every 6 hours) | Send due follow-up emails |
+| `/api/automation/cron` | `0 8 * * *` (daily 08:00) | Send due follow-up emails |
 | `/api/sourcing/cron` | `0 7 * * *` (daily 07:00) | Run all enabled sourcing rules |
 
 **Protection:** if `CRON_SECRET` is set, requests must include `Authorization: Bearer <CRON_SECRET>`

@@ -107,7 +107,7 @@ Emails are sent via `/api/email/send` and automated follow-ups via `/api/automat
 
 On Vercel, `vercel.json` schedules two jobs (both protected by `CRON_SECRET`):
 
-- `/api/automation/cron` — every 6 hours — sends due follow-up emails (Day 1/3/7/14, stops on reply).
+- `/api/automation/cron` — daily at 08:00 UTC — sends due follow-up emails (Day 1/3/7/14, stops on reply).
 - `/api/sourcing/cron` — daily at 07:00 UTC — runs all enabled Auto-Sourcing rules.
 
 Both expect:
