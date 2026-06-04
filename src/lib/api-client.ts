@@ -5,8 +5,8 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
   const user = auth.currentUser;
   if (!user) throw new Error("Not authenticated");
 
-  const token = await user.getIdToken();
-  const res = await fetch(path, {
+  let token = await user.getIdToken();
+  let res = await fetch(path, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -14,6 +14,20 @@ export async function apiFetch(path: string, options: RequestInit = {}) {
       ...options.headers,
     },
   });
+
+  // The cached ID token can be stale (e.g. a long-lived/backgrounded tab). On a
+  // 401, force-refresh the token once and retry before surfacing an error.
+  if (res.status === 401) {
+    token = await user.getIdToken(true);
+    res = await fetch(path, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        ...options.headers,
+      },
+    });
+  }
 
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {

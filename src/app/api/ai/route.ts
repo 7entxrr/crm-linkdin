@@ -7,17 +7,17 @@ import { getTemplateVariablesFromCandidate } from "@/lib/email/template";
 type AiAction = "draft_email" | "summarize" | "suggest_next_step";
 
 async function callLlm(prompt: string): Promise<string | null> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) return null;
 
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
+      model: process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile",
       messages: [{ role: "user", content: prompt }],
       max_tokens: 600,
       temperature: 0.7,

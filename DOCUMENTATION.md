@@ -446,8 +446,8 @@ an `outreachs` doc with `channel: "sms"`. There is no dedicated SMS UI page (API
 ## 15. AI assist
 
 On the candidate detail page, AI assist can **draft an outreach email**, **summarize a candidate**,
-and **suggest the next step**. It uses OpenAI when `OPENAI_API_KEY` is set (model via `OPENAI_MODEL`,
-default `gpt-4o-mini`), and falls back to template-based output otherwise.
+and **suggest the next step**. It uses Groq when `GROQ_API_KEY` is set (model via `GROQ_MODEL`,
+default `llama-3.3-70b-versatile`), and falls back to template-based output otherwise.
 
 ---
 
@@ -520,8 +520,8 @@ INBOUND_SECRET=           # secures inbound email webhook (falls back to CRON_SE
 NEXT_PUBLIC_APP_URL=http://localhost:3000   # base URL for tracking/unsubscribe links
 
 # Optional integrations
-OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4o-mini
+GROQ_API_KEY=
+GROQ_MODEL=llama-3.3-70b-versatile
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_FROM_NUMBER=

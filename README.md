@@ -175,7 +175,7 @@ Every email includes a signed unsubscribe link (`/api/unsubscribe`). Unsubscribi
 - **Dark mode** — toggle in the header
 - **Conversation thread** — inbound/outbound messages on candidate detail
 - **CSV import wizard** — column mapping + duplicate preview before import
-- **AI assist** — draft email, summarize candidate, suggest next step (`OPENAI_API_KEY` optional; template fallback)
+- **AI assist** — draft email, summarize candidate, suggest next step (`GROQ_API_KEY` optional; template fallback)
 - **Duplicate merge** — admin "Find Duplicates" on Candidates
 - **SMS** — `POST /api/sms/send` via Twilio (optional env vars)
 - **Interview scheduling** — "Schedule Interview" when status is Interested

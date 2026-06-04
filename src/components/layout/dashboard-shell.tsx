@@ -9,6 +9,7 @@ import { AppSidebar } from "./app-sidebar";
 import { AppHeader } from "./app-header";
 import { PageSkeleton } from "@/components/shared/loading-skeleton";
 import { CommandPalette } from "./command-palette";
+import { AiChatWidget } from "@/components/ai/ai-chat-widget";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const { loading, firebaseUser, role, profile } = useAuth();
@@ -60,6 +61,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           <div className="mx-auto w-full max-w-7xl">{children}</div>
         </motion.main>
       </div>
+      <AiChatWidget />
     </div>
   );
 }
